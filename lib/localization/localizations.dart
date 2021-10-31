@@ -104,7 +104,10 @@ class AppLocalizations {
       Intl.message('Km From You', name: 'kmFromYou');
   String get selectedLocation =>
       Intl.message('Selected Location :', name: 'selectedLocation');
-
+  String get firstAddYourProfileData =>
+      Intl.message('First add your profile data, please click +  button', name: 'firstAddYourProfileData');
+  String get youCanOpenYourProfileDataFromProfileButton =>
+      Intl.message('You can open your profile data from profile button', name: 'youCanOpenYourProfileDataFromProfileButton');
 }
 
 class SpecificLocalizationDelegate

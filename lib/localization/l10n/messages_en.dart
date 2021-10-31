@@ -64,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mapScreen": MessageLookupByLibrary.simpleMessage("Map Screen"),
     "kmFromYou": MessageLookupByLibrary.simpleMessage("Km From You"),
     "selectedLocation": MessageLookupByLibrary.simpleMessage("Selected Location :"),
-
+    "firstAddYourProfileData": MessageLookupByLibrary.simpleMessage("First add your profile data, please click +  button"),
+    "youCanOpenYourProfileDataFromProfileButton": MessageLookupByLibrary.simpleMessage("You can open your profile data from profile button"),
       };
 }

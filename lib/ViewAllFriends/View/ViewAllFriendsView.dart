@@ -55,12 +55,31 @@ class _ViewAllFriendsViewState extends State<ViewAllFriendsView>
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
                       FriendsModel friendsModel =
-                      FriendsModel.fromMap(snapshot.data[index]);
+                          FriendsModel.fromMap(snapshot.data[index]);
                       friendsList.add(friendsModel);
-                      if (friendsModel.id == 1) {
+                      if (friendsModel.id == 1 && snapshot.data.length == 1) {
                         profileModel = friendsModel;
-                        return SizedBox();
-                      } else {
+                        return Container(
+                          height: SizeConfig.safeBlockVertical * 90,
+                          child: Center(
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: AppColors.BLACK_COLOR,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: SizeConfig.textFontSize,
+                                ),
+                                children: [
+                                  TextSpan(text: AppLocalizations.of(context)!.youCanOpenYourProfileDataFromProfileButton),
+                                  WidgetSpan(
+                                    child: Icon(Icons.person),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (friendsModel.id !=1) {
                         return Card(
                           margin: EdgeInsets.all(SizeConfig.padding / 2),
                           color: AppColors.MED_LIGHT_GREY,
@@ -122,30 +141,44 @@ class _ViewAllFriendsViewState extends State<ViewAllFriendsView>
                           ),
                         );
                       }
+                      else return SizedBox();
                     });
-              } else {
+              } else
                 return Center(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: AppColors.BLACK_COLOR,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AddScreenView(true)));
-                    },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          color: AppColors.BLACK_COLOR,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AddScreenView(true)));
+                        },
+                      ),
+                      Text(
+                        AppLocalizations.of(context)!.firstAddYourProfileData,
+                        style: TextStyle(
+                          color: AppColors.BLACK_COLOR,
+                          fontWeight: FontWeight.bold,
+                          fontSize: SizeConfig.textFontSize,
+                        ),
+                      ),
+                    ],
                   ),
                 );
-              }
             },
           ),
           Positioned(
-            bottom: 30 ,
+            bottom: 30,
             right: 30,
             child: AnimatedBuilder(
               animation: viewAllFriendsBloc.animationController,
               builder: (BuildContext context, Widget? child) {
-               return Stack(
+                return Stack(
                   alignment: Alignment.bottomRight,
                   children: [
                     IgnorePointer(
@@ -204,8 +237,14 @@ class _ViewAllFriendsViewState extends State<ViewAllFriendsView>
                             color: AppColors.WHITE_COLOR,
                           ),
                           onClick: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MapScreenView(false, friendsList: friendsList,)));
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => MapScreenView(
+                                  false,
+                                  friendsList: friendsList,
+                                ),
+                              ),
+                            );
                           }),
                     ),
                     Transform.translate(
@@ -220,8 +259,11 @@ class _ViewAllFriendsViewState extends State<ViewAllFriendsView>
                             color: AppColors.WHITE_COLOR,
                           ),
                           onClick: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AboutAppView()));
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => AboutAppView(),
+                              ),
+                            );
                           }),
                     ),
                     CircularButton(
@@ -233,14 +275,15 @@ class _ViewAllFriendsViewState extends State<ViewAllFriendsView>
                           color: AppColors.WHITE_COLOR,
                         ),
                         onClick: () {
-                          if (viewAllFriendsBloc.animationController.isCompleted) {
+                          if (viewAllFriendsBloc
+                              .animationController.isCompleted) {
                             viewAllFriendsBloc.animationController.reverse();
                           } else {
                             viewAllFriendsBloc.animationController.forward();
                           }
                         }),
                   ],
-               );
+                );
               },
             ),
           ),

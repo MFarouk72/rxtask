@@ -64,5 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "mapScreen": MessageLookupByLibrary.simpleMessage("الخريطة"),
     "kmFromYou": MessageLookupByLibrary.simpleMessage("كم منك"),
     "selectedLocation": MessageLookupByLibrary.simpleMessage("الموقع المختار:"),
+    "firstAddYourProfileData": MessageLookupByLibrary.simpleMessage("قم أولاً بإضافة بيانات ملفك الشخصي ، الرجاء النقر فوق زر +"),
+    "youCanOpenYourProfileDataFromProfileButton": MessageLookupByLibrary.simpleMessage("يمكنك فتح بيانات ملفك الشخصي من زر الملف الشخصي"),
       };
 }
