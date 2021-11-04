@@ -1,22 +1,35 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rxtask/Commons/CommonBlocs/PlayAudioBloc.dart';
 import 'package:rxtask/utilites/Constants/AppColors.dart';
 import 'package:rxtask/utilites/SizeConfig.dart';
 import 'package:rxtask/EditScreen/View/EditScreenView.dart';
 import 'package:rxtask/Commons/CommonModels/FriendsModel.dart';
 import 'package:rxtask/localization/localizations.dart';
 
-class FriendInfoView extends StatelessWidget {
+class FriendInfoView extends StatefulWidget {
   final FriendsModel friendsModel;
   FriendInfoView(this.friendsModel);
 
+  @override
+  State<FriendInfoView> createState() => _FriendInfoViewState();
+}
+
+class _FriendInfoViewState extends State<FriendInfoView> {
+  late PlayAudioBloc playAudioBloc;
+  @override
+  void initState() {
+    super.initState();
+    playAudioBloc = PlayAudioBloc();
+    playAudioBloc.init();
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text( friendsModel.id == 1 ? AppLocalizations.of(context)!.profileScreen :AppLocalizations.of(context)!.friendInformation),
+        title: Text( widget.friendsModel.id == 1 ? AppLocalizations.of(context)!.profileScreen :AppLocalizations.of(context)!.friendInformation),
         centerTitle: true,
         elevation: 0,
       ),
@@ -30,15 +43,16 @@ class FriendInfoView extends StatelessWidget {
               child: CircleAvatar(
                 radius: SizeConfig.safeBlockHorizontal * 19,
                 backgroundImage: FileImage(
-                  File(friendsModel.imagePath),
+                  File(widget.friendsModel.imagePath),
                 ),
               ),
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                 '${ friendsModel.firstName.toString().toUpperCase()} ${ friendsModel.lastName.toString().toUpperCase()} ',
+                 '${ widget.friendsModel.firstName.toString().toUpperCase()} ${ widget.friendsModel.lastName.toString().toUpperCase()} ',
                   style: TextStyle(
                     color:AppColors.BLACK_COLOR,
                     fontWeight: FontWeight.bold,
@@ -47,7 +61,7 @@ class FriendInfoView extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: (){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> EditScreenView(friendsModel)));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> EditScreenView(widget.friendsModel)));
                   },
                   child: Container(
                     width: SizeConfig.safeBlockHorizontal * 10,
@@ -78,7 +92,7 @@ class FriendInfoView extends StatelessWidget {
                         Icon(Icons.email),
                         SizedBox(width: SizeConfig.padding/2,),
                         Text(
-                          ' ${friendsModel.email}',
+                          ' ${widget.friendsModel.email}',
                           style: TextStyle(
                             color: AppColors.BLACK_COLOR,
                             fontWeight: FontWeight.normal,
@@ -96,7 +110,7 @@ class FriendInfoView extends StatelessWidget {
                         SizedBox(width: SizeConfig.padding/2,),
                         Expanded(
                           child: Text(
-                            ' ${friendsModel.address}',
+                            ' ${widget.friendsModel.address}',
                             style: TextStyle(
                               color:AppColors.BLACK_COLOR,
                               fontWeight: FontWeight.normal,
@@ -114,7 +128,7 @@ class FriendInfoView extends StatelessWidget {
                         Icon(Icons.phone),
                         SizedBox(width:SizeConfig.padding/2,),
                         Text(
-                          ' ${friendsModel.phone}',
+                          ' ${widget.friendsModel.phone}',
                           style: TextStyle(
                             color:AppColors.BLACK_COLOR,
                             fontWeight: FontWeight.normal,
@@ -131,7 +145,7 @@ class FriendInfoView extends StatelessWidget {
                         Icon(Icons.male),
                         SizedBox(width: SizeConfig.padding/2,),
                         Text(
-                          ' ${friendsModel.gender}',
+                          ' ${widget.friendsModel.gender}',
                           style: TextStyle(
                             color:AppColors.BLACK_COLOR,
                             fontWeight: FontWeight.normal,
@@ -149,7 +163,7 @@ class FriendInfoView extends StatelessWidget {
                         SizedBox(width: SizeConfig.padding/2,),
                         Expanded(
                           child: Text(
-                            ' ${friendsModel.lat} ${" "} ${friendsModel.long} ',
+                            ' ${widget.friendsModel.lat} ${" "} ${widget.friendsModel.long} ',
                             maxLines: 3,
                             style: TextStyle(
                               color:AppColors.BLACK_COLOR,
@@ -160,6 +174,7 @@ class FriendInfoView extends StatelessWidget {
                         ),
                       ],
                     ),
+                    buildPlay(),
                   ],
                 ),
               ),
@@ -168,5 +183,35 @@ class FriendInfoView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget buildPlay() {
+    final isPlaying = playAudioBloc.isPlaying;
+    final icon = isPlaying ? Icons.stop : Icons.play_arrow;
+    final text = isPlaying ? 'STOP' : 'Play';
+    final primary = isPlaying ? Colors.red : AppColors.BROUWN_COLOR;
+    final onPrimary = isPlaying ? Colors.white : Colors.black;
+
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(175, 50),
+        primary: primary,
+        onPrimary: onPrimary,
+      ),
+      onPressed: () async {
+        // await playAudioBloc.togglePlayStop(path: widget.friendsModel.audioPath, whenFinished: (){});
+        await playAudioBloc.togglePlayStop(widget.friendsModel.audioPath);
+        setState(() {
+        });
+      },
+      icon: Icon(icon),
+      label: Text(text),
+    );
+  }
+
+  @override
+  void dispose() {
+    playAudioBloc.dispose();
+    super.dispose();
   }
 }

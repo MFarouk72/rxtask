@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:rxtask/Commons/CommonBlocs/PlayAudioBloc.dart';
+import 'package:rxtask/Commons/CommonBlocs/RecordAudioBloc.dart';
 import 'package:rxtask/Database/dbhelper.dart';
 import 'package:rxtask/Commons/CommonModels/FriendsModel.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +12,6 @@ import 'package:rxtask/MapScreen/Bloc/MapScreenBloc.dart';
 import 'package:rxtask/localization/localizations.dart';
 class UserBloc {
   var imagePath;
-  MapScreenBloc mapScreenBloc = MapScreenBloc();
   BehaviorSubject<String> firstNameSubject = BehaviorSubject.seeded("");
   BehaviorSubject<String> lastNameSubject = BehaviorSubject.seeded("");
   BehaviorSubject<String> emailSubject = BehaviorSubject.seeded("");
@@ -37,7 +38,7 @@ class UserBloc {
 
   DbHelper dbHelper = DbHelper();
 
-  createNewFriend() async {
+  createNewFriend(String audioPath) async {
     FriendsModel friendsModel = FriendsModel({
       'firstName' : firstNameSubject.value,
       'lastName' : lastNameSubject.value,
@@ -48,6 +49,7 @@ class UserBloc {
       'imagePath' : imagePathSubject.value,
       'lat' : MapScreenBloc.latitude.toString(),
       'long' : MapScreenBloc.longitude.toString(),
+      'audioPath' : audioPath,
     });
     await dbHelper.addFriend(friendsModel);
   }

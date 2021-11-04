@@ -9,6 +9,7 @@ class FriendsModel {
   late String _imagePath;
   late String _lat;
   late String _long;
+  late String _audioPath;
 
   FriendsModel(dynamic obj) {
     _id = obj['id'];
@@ -21,6 +22,7 @@ class FriendsModel {
     _imagePath = obj['imagePath'];
     _lat = obj['lat'];
     _long = obj['long'];
+    _audioPath = obj ['audioPath'];
   }
 
   FriendsModel.fromMap(Map<String, dynamic> data) {
@@ -34,6 +36,7 @@ class FriendsModel {
     _imagePath = data['imagePath'];
     _lat = data['lat'];
     _long = data['long'];
+    _audioPath = data['audioPath'];
   }
 
   Map<String, dynamic> toMap() => {
@@ -47,6 +50,7 @@ class FriendsModel {
         'imagePath': _imagePath,
         'lat': _lat,
         'long': _long,
+    'audioPath': _audioPath,
       };
 
   int? get id => _id;
@@ -68,4 +72,5 @@ class FriendsModel {
   String get lat => _lat;
 
   String get long => _long;
+  String get audioPath => _audioPath;
 }

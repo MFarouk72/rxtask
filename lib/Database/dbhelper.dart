@@ -12,7 +12,7 @@ class DbHelper{
     String path = join(await getDatabasesPath(), 'friends.db');
     _db = await openDatabase(path, version: 1 , onCreate: (Database db , int v){
       db..execute(
-          'CREATE TABLE friends (id INTEGER PRIMARY KEY autoincrement, firstName TEXT, lastName TEXT, email TEXT, phone TEXT,address TEXT , gender TEXT , imagePath TEXT ,lat TEXT , long TEXT)')
+          'CREATE TABLE friends (id INTEGER PRIMARY KEY autoincrement, firstName TEXT, lastName TEXT, email TEXT, phone TEXT,address TEXT , gender TEXT , imagePath TEXT ,lat TEXT , long TEXT , audioPath TEXT)')
           .then((value) {
         print('table created');
       }).catchError((error) {

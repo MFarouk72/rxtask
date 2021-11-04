@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rxtask/AddScreen/View/AddGenderDropDown.dart';
+import 'package:rxtask/Commons/CommonBlocs/PlayAudioBloc.dart';
+import 'package:rxtask/Commons/CommonBlocs/RecordAudioBloc.dart';
 import 'package:rxtask/Commons/CommonWidgets/DefaultButton.dart';
 import 'package:rxtask/Commons/CommonWidgets/DefultFormField.dart';
 import 'package:rxtask/MapScreen/Bloc/MapScreenBloc.dart';
@@ -21,12 +23,15 @@ class AddScreenView extends StatefulWidget {
 class _AddScreenViewState extends State<AddScreenView> {
   late UserBloc userBloc;
   late MapScreenBloc mapScreenBloc;
+  late RecordAudioBloc audioPlayerBloc;
 
   @override
   void initState() {
     super.initState();
     userBloc = UserBloc();
     mapScreenBloc = MapScreenBloc();
+    audioPlayerBloc = RecordAudioBloc();
+    audioPlayerBloc.init();
   }
 
   @override
@@ -104,6 +109,7 @@ class _AddScreenViewState extends State<AddScreenView> {
                           ),
                         ),
                       ),
+                buildStart(),
                 DefaultFormField(
                   controller: userBloc.firstNameController,
                   type: DefaultFormFieldType.TEXT,
@@ -177,7 +183,7 @@ class _AddScreenViewState extends State<AddScreenView> {
                   function: () {
                     if (userBloc.formKey.currentState!.validate() &&
                         userBloc.imagePath != null) {
-                      userBloc.createNewFriend();
+                      userBloc.createNewFriend(audioPlayerBloc.audioPathSubject.value);
                       Navigator.of(context).pop();
                     }
                   },
@@ -188,5 +194,34 @@ class _AddScreenViewState extends State<AddScreenView> {
         ),
       ),
     );
+  }
+
+  Widget buildStart() {
+    final isRecording = audioPlayerBloc.isRecording;
+    final icon = isRecording ? Icons.stop : Icons.mic;
+    final text = isRecording ? 'STOP' : 'Start';
+    final primary = isRecording ? Colors.red : AppColors.BROUWN_COLOR;
+    final onPrimary = isRecording ? Colors.white : Colors.black;
+
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(175, 50),
+        primary: primary,
+        onPrimary: onPrimary,
+      ),
+        onPressed: () async {
+        await audioPlayerBloc.toggleRecording(DateTime.now().toString());
+        setState(() {
+        });
+        },
+        icon: Icon(icon),
+        label: Text(text),
+    );
+  }
+
+  @override
+  void dispose() {
+    audioPlayerBloc.dispose();
+    super.dispose();
   }
 }

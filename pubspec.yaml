@@ -44,6 +44,8 @@ dev_dependencies:
   geolocator:
   geocoding: ^2.0.1
   custom_info_window: ^1.0.1
+  flutter_sound: ^8.4.2
+  permission_handler: ^8.2.5
 
 
 # For information on the generic Dart part of this file, see the
